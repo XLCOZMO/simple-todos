@@ -1,0 +1,26 @@
+body {
+  padding: 10px;
+  font-family: sans-serif;
+  background-color: #141414;
+  color: #E6E6E6;
+}
+
+.top {
+	background-color: #404040;
+	padding-top: 2em;
+	padding-bottom: 2em;
+	background-image: linear-gradient(to bottom, #202040, #141414 95%);
+}
+
+.main {
+	font-size: 1.1em;
+	padding-bottom: 1em;
+}
+
+.taskName {
+	
+}
+
+/*.inline-block {
+	display: inline-block;
+}*/
