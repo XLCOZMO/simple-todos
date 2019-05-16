@@ -1,14 +1,15 @@
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
-import { Index, MinimongoEngine } from 'meteor/easy:search'
 import { Session } from 'meteor/session';
 import { Accounts } from 'meteor/accounts-base';
 
 import './main.html';
 import '../lib/collections.js';
 
-Session.set('taskLimit', 3);
+Session.set('taskLimit', 10);
 Session.set('userFilter', false);
+
+Session.set('-')
 
 lastScrollTop = 0;
 $(window).scroll(function(event){
@@ -17,36 +18,19 @@ $(window).scroll(function(event){
 		var scrollTop = $(this).scrollTop();
 
 		if (scrollTop > lastScrollTop){
-			Session.set('taskLimit', Session.get('taskLimit') + 3);			
+			Session.set('taskLimit', Session.get('taskLimit') + 5);			
 		}
 		lastScrollTop = scrollTop;
 	}
 });
 
-const TasksIndex = new Index({
-	collection: todoDB,
-	fields: ['task'],
-	engine: new MinimongoEngine(),
-});
-
-// Tracker.autorun(function () {
-//   let cursor = TasksIndex.search('More Code'); // search all docs that contain "Apply Patch" in the task field
-
-//   console.log(cursor.fetch()); // log found documents with default search limit
-//   console.log(cursor.count()); // log count of all found documents
-// });
-
 Accounts.ui.config({
   passwordSignupFields: 'USERNAME_ONLY',
 });
 
-Template.search.helpers({
-  tasksIndex: () => TasksIndex, // instanceof EasySearch.Index
-});
-
 Template.top.helpers({
 	tasksFound(){
-  		return todoDB.find().count();
+  		return todoDB.find({}).count({});
   	},
 });
 
@@ -88,12 +72,18 @@ Template.main.helpers({
 
   	userLoggedIn(){
   		var logged = todoDB.findOne({_id:this._id}).postedBy;
+  		var userName = Meteor.users.findOne({_id:logged}).username;
+  		console.log(userName);
   		return Meteor.users.findOne({_id:logged}).username;
   	},
 
   	userId(){
   		return todoDB.findOne({_id:this._id}).postedBy;
   	},
+
+  	isOwner() {
+    	return this.owner === Meteor.userId();
+    },
 });
 
 Template.main.events({
@@ -103,7 +93,7 @@ Template.main.events({
 		var confirmation = confirm("Are you sure you want to delete this");
 
 		if (confirmation == true) {
-			$('#' + deleteID).fadeOut('slow', function(){
+			$('#' + deleteID).fadeOut('slow','swing', function(){
 				todoDB.remove({_id:deleteID});
 			});			
 		}	
@@ -119,21 +109,35 @@ Template.main.events({
 	},
 });
 
-// Template.top.events({
-
-// });
-
-Template.addTodo.events({
-	'click .js-save'(event, instance){
-		var Task = $('#Task').val();
+Template.top.events({
+	'click .js-submit'(event, instance){
+		var Task = $('#newTask').val();
 
 		if (Task == ""){
 			Task = "No Task";
 		}
 
-		todoDB.insert({'task':Task,'createdOn':new Date().getTime(), 'postedBy':Meteor.user()._id});
+		if($('#private').is(':checked')){
+			todoDB.insert({'task':Task, 'private':1, 'createdOn':new Date().getTime(), 'postedBy':Meteor.user()._id});
+			$("#private").prop("checked", false);
+			$("#newTask").val('');
+		} else {
+			todoDB.insert({'task':Task, 'private':0, 'createdOn':new Date().getTime(), 'postedBy':Meteor.user()._id});
+			$("#newTask").val('');
+		}
+	},
+});
 
-		$('#Task').val('');
-		$('#addTodo').modal('hide');
+Template.editTodo.events({
+	'click .js-editSave'(event, instance){
+		var Save = this._id;		
+		var Todo = $('#changeTodo').val();
+
+		console.log(Save, " ", Todo);
+
+		todoDB.update({_id: Save}, {$set:{'task':Todo, 'createdOn':new Date().getTime()}});
+
+		$('#changeTodo').val('');
+		$('#editTodo').modal('hide');
 	},
 });

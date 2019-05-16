@@ -5,16 +5,41 @@ body {
   color: #E6E6E6;
 }
 
+body, html {
+  height: 100%;
+}
+
 .top {
 	background-color: #404040;
 	padding-top: 2em;
 	padding-bottom: 2em;
 	background-image: linear-gradient(to bottom, #202040, #141414 95%);
+	background-position: center;
 }
 
 .main {
 	font-size: 1.1em;
 	padding-bottom: 1em;
+}
+
+.parallax {
+	background-image: url('Leaves.jpg');
+  	height: 30%; 
+  	background-attachment: fixed;
+  	background-position: center;
+  	background-repeat: no-repeat;
+  	background-size: cover;
+  	opacity: 0.8;
+}
+
+.parallax2 {
+	background-image: url('Forest.jpg');
+  	height: 100%; 
+  	background-attachment: fixed;
+  	background-position: center;
+  	background-repeat: no-repeat;
+  	background-size: cover;
+  	opacity: 0.8;
 }
 
 .taskName {
