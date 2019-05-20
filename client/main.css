@@ -13,7 +13,7 @@ body, html {
 	background-color: #404040;
 	padding-top: 2em;
 	padding-bottom: 2em;
-	background-image: linear-gradient(to bottom, #202040, #141414 95%);
+	background-image: linear-gradient(to bottom, #867e68, #141414 95%);
 	background-position: center;
 }
 
@@ -33,7 +33,7 @@ body, html {
 }
 
 .parallax2 {
-	background-image: url('Forest.jpg');
+	background-image: url('Todo2.jpg');
   	height: 100%; 
   	background-attachment: fixed;
   	background-position: center;
