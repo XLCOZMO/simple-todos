@@ -49,26 +49,53 @@
 
 <template name="main">
 	{{#each mainAll}}
-	<div class="row main" id="{{_id}}">
-			<div class="col-auto">			
-				<div class="custom-control custom-checkbox">
-				  <input class="custom-control-input" type="checkbox" value="" id="task{{_id}}">
-				  <label class="custom-control-label" for="task{{_id}}">{{task}}</label>
+	<div id = {{_id}}>
+		{{#if isPrivate}}
+			<div class="row main">
+				<div class="col-auto">			
+					<div class="custom-control custom-checkbox">
+					  <input class="custom-control-input" type="checkbox" value="" id="task{{_id}}">
+					  <label class="custom-control-label" for="task{{_id}}"><b>(Private)</b>{{task}}</label>
+					</div>
+				</div>
+
+				<div class="col-auto">
+					<small class="text-muted">{{taskAge}}</small>
+					<small>Posted by <a href="#" id={{userId}} class="usrClick">{{userLoggedIn}}</a></small>
+				</div>
+
+				<div class="col-auto">
+					<i class="zmdi zmdi-close-circle js-delete"></i>
+				</div>
+
+				<div class="col-auto">
+					<i class="zmdi zmdi-edit js-edit" data-toggle="modal" data-target="#editTodo"></i>
 				</div>
 			</div>
+		{{/if}}
+		{{#if isPrivate}}
+			<div class="row main">
+				<div class="col-auto">			
+					<div class="custom-control custom-checkbox">
+					  <input class="custom-control-input" type="checkbox" value="" id="task{{_id}}">
+					  <label class="custom-control-label" for="task{{_id}}">{{task}}</label>
+					</div>
+				</div>
 
-			<div class="col-auto">
-				<small class="text-muted">{{taskAge}}</small>
-				<small>Posted by <a href="#" id={{userId}} class="usrClick">{{userLoggedIn}}</a></small>
-			</div>
+				<div class="col-auto">
+					<small class="text-muted">{{taskAge}}</small>
+					<small>Posted by <a href="#" id={{userId}} class="usrClick">{{userLoggedIn}}</a></small>
+				</div>
 
-			<div class="col-auto">
-				<i class="zmdi zmdi-close-circle js-delete"></i>
-			</div>
+				<div class="col-auto">
+					<i class="zmdi zmdi-close-circle js-delete"></i>
+				</div>
 
-			<div class="col-auto">
-				<i class="zmdi zmdi-edit js-edit" data-toggle="modal" data-target="#editTodo"></i>
+				<div class="col-auto">
+					<i class="zmdi zmdi-edit js-edit" data-toggle="modal" data-target="#editTodo"></i>
+				</div>
 			</div>
+		{{/if}}
 	</div>
 	{{/each}}
 </template>

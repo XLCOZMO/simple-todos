@@ -50,6 +50,21 @@ Template.main.helpers({
     		return todoDB.find({postedBy:Session.get("userFilter")}, {sort:{createdOn: 1}, limit:Session.get('taskLimit')});
     	}  	
   	},
+  	isPrivate(){
+  		if (todoDB.findOne({'_id':this._id}).private==true){
+  			if (todoDB.findOne({'_id':this._id}).postedBy == Meteor.user()._id){
+  				return true;
+  			}
+  		}
+  		return false;
+  	},
+
+  	isPublic(){
+  		if (todoDB.findOne({'_id':this._id}).private==false){
+  			return true;
+  		}
+  		return false;
+  	}
 
   	taskAge(){
   		var taskCreatedOn = todoDB.findOne({_id:this._id}).createdOn;
@@ -114,16 +129,13 @@ Template.top.events({
 		var Task = $('#newTask').val();
 
 		if (Task == ""){
-			Task = "No Task";
+			alert("A task must be entered");
 		}
-
-		if($('#private').is(':checked')){
-			todoDB.insert({'task':Task, 'private':1, 'createdOn':new Date().getTime(), 'postedBy':Meteor.user()._id});
-			$("#private").prop("checked", false);
+		else{
+			var chkbox = document.getElementById("private");
+			todoDB.insert({'task':Task, 'private':chkbox.checked, 'createdOn':new Date().getTime(), 'postedBy':Meteor.user()._id});
 			$("#newTask").val('');
-		} else {
-			todoDB.insert({'task':Task, 'private':0, 'createdOn':new Date().getTime(), 'postedBy':Meteor.user()._id});
-			$("#newTask").val('');
+			chkbox.checked= false;
 		}
 	},
 });
