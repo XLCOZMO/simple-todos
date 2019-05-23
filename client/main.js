@@ -64,7 +64,7 @@ Template.main.helpers({
   			return true;
   		}
   		return false;
-  	}
+  	},
 
   	taskAge(){
   		var taskCreatedOn = todoDB.findOne({_id:this._id}).createdOn;
